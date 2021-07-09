@@ -15,31 +15,26 @@ const LineChartComponent = (props: Props, ref: any) => {
 	const { data } = props;
 
 	const [representation, setRepresentation] = React.useState(data);
-	const [dataKey, setDataKey] = React.useState('');
-	const typeRef = React.useRef('');
-	const xAxisRef = React.useRef('');
-	const yAxisRef = React.useRef('');
+	const [chartType, setChartType] = React.useState('');
+	const [xAxis, setXAxis] = React.useState('');
+	const [yAxis, setYAxis] = React.useState('');
 
 	const drawChart = React.useCallback(
 		(values: any) => {
-			if (values[fields.xAxis.name].includes('KEYS')) {
-				const dataObject = getDataObject(data, values[fields.xAxis.name]);
+			if (values[fields.yAxis.name].includes('KEYS')) {
+				const dataObject = getDataObject(data, values[fields.yAxis.name]);
 
 				const keyObject = keysToObject(dataObject);
 
 				setRepresentation(keyObject);
-				setDataKey('value');
-
-				typeRef.current = values.type;
-				xAxisRef.current = values[fields.xAxis.name];
-				yAxisRef.current = values[fields.yAxis.name];
+				setChartType(values.type);
+				setXAxis('key');
+				setYAxis('value');
 			} else {
-				typeRef.current = values.type;
-				xAxisRef.current = values[fields.xAxis.name];
-				yAxisRef.current = values[fields.yAxis.name];
-
 				setRepresentation(data);
-				setDataKey(values[fields.xAxis.name]);
+				setChartType(values.type);
+				setXAxis(values[fields.xAxis.name]);
+				setYAxis(values[fields.yAxis.name]);
 			}
 		},
 		[data]
@@ -52,14 +47,14 @@ const LineChartComponent = (props: Props, ref: any) => {
 		})
 	);
 
-	if (!representation || dataKey.length === 0) return null;
+	if (!representation || chartType.length === 0 || xAxis.length === 0 || yAxis.length === 0) return null;
 	return (
 		<ResponsiveContainer minHeight={400}>
-			<LineChart data={representation} width={400} height={400}>
-				<Line type="monotone" dataKey={dataKey} stroke="#8884d8" />
+			<LineChart data={representation}>
+				<Line type="monotone" dataKey={yAxis} stroke="#8884d8" />
 				<CartesianGrid stroke="#ccc" />
-				<XAxis dataKey="key" />
-    			<YAxis />
+				<XAxis dataKey={xAxis} />
+				<YAxis />
 				<Tooltip />
 			</LineChart>
 		</ResponsiveContainer>
