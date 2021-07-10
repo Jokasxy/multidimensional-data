@@ -1,6 +1,6 @@
 import React from 'react';
 import { chartTypes, fields } from '../consts/consts';
-import { getDataObject, keysToObject } from '../helpers/dataKeyHelper';
+import { getDataObject, keysToObject, moveToDataArray } from '../helpers/dataKeyHelper';
 import BarChartComponent from './barChart';
 import LineChartComponent from './lineChart';
 
@@ -32,10 +32,12 @@ const Chart = (props: Props, ref: any) => {
 				setXAxis('key');
 				setYAxis('value');
 			} else {
-				setRepresentation(data);
+				const movedData = moveToDataArray(data, values[fields.xAxis.name], values[fields.yAxis.name]);
+
+				setRepresentation(movedData.data);
 				setChartType(values.type);
-				setXAxis(values[fields.xAxis.name]);
-				setYAxis(values[fields.yAxis.name]);
+				setXAxis(movedData.xAxis);
+				setYAxis(movedData.yAxis);
 			}
 		},
 		[data]
