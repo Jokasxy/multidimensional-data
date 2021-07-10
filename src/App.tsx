@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, Button, TextField, MenuItem } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
 import './App.css';
-import { fields } from './consts/consts';
+import { charts, fields } from './consts/consts';
 import { queryApiData } from './helpers/queryHelper';
-import LineChartComponent, { ChartRef } from './components/lineChart';
+import Chart, { ChartRef } from './components/chart';
 import { dataKeyMapper } from './helpers/dataKeyHelper';
 
 function App() {
@@ -66,8 +66,11 @@ function App() {
 									// error={Boolean(errors[scheduleFields.remark])}
 									// helperText={errors[scheduleFields.remark] ? errors[scheduleFields.remark].message : ''}
 								>
-									<MenuItem value="LineChart">Linijski Graf</MenuItem>
-									<MenuItem value="BarChart">Stupčasti Graf</MenuItem>
+									{charts.map((item, key) => (
+										<MenuItem key={key} value={item.value}>
+											{item.name}
+										</MenuItem>
+									))}
 								</TextField>
 							)}
 							control={control}
@@ -134,7 +137,7 @@ function App() {
 					</Box>
 				)}
 
-				<LineChartComponent data={queryData} ref={chartRef} />
+				<Chart data={queryData} ref={chartRef} />
 			</Box>
 		</Box>
 	);

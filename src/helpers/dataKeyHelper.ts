@@ -6,6 +6,7 @@ export const dataKeyMapper = (response: any, parent?: string) => {
 	}
 
 	Object.keys(response).forEach((key) => {
+		// @ts-ignore
 		if (typeof response[key] === 'object') {
 			if (parent) {
 				data.push(dataKeyMapper(response[key], parent + '.' + key));

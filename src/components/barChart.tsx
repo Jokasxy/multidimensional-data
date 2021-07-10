@@ -1,4 +1,4 @@
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, BarChart, ResponsiveContainer } from 'recharts';
 import { colors } from '../consts/colors';
 
 interface Props {
@@ -7,20 +7,20 @@ interface Props {
 	yAxis: string;
 }
 
-const LineChartComponent = (props: Props) => {
+const BarChartComponent = (props: Props) => {
 	const { data, xAxis, yAxis } = props;
 
 	return (
 		<ResponsiveContainer minHeight={400}>
-			<LineChart data={data}>
-				<Line type="monotone" dataKey={yAxis} stroke={colors.blue} />
+			<BarChart data={data}>
+				<Bar dataKey={yAxis} fill={colors.blue} />
 				<CartesianGrid stroke={colors.gridGray} />
 				<XAxis dataKey={xAxis} />
 				<YAxis />
 				<Tooltip />
-			</LineChart>
+			</BarChart>
 		</ResponsiveContainer>
 	);
 };
 
-export default LineChartComponent;
+export default BarChartComponent;
