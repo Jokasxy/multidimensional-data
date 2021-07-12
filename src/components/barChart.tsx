@@ -12,7 +12,7 @@ const BarChartComponent = (props: Props) => {
 
 	return (
 		<ResponsiveContainer minHeight={400}>
-			<BarChart data={data}>
+			<BarChart data={data} margin={{ left: 50, right: 5 }}>
 				<Bar dataKey={yAxis} fill={colors.blue} />
 				<CartesianGrid stroke={colors.gridGray} />
 				<XAxis dataKey={xAxis} />

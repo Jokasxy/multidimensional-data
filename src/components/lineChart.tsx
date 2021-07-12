@@ -12,11 +12,11 @@ const LineChartComponent = (props: Props) => {
 
 	return (
 		<ResponsiveContainer minHeight={400}>
-			<LineChart data={data}>
+			<LineChart data={data} margin={{ left: 50, right: 5 }}>
 				<Line type="monotone" dataKey={yAxis} stroke={colors.blue} />
 				<CartesianGrid stroke={colors.gridGray} />
 				<XAxis dataKey={xAxis} />
-				<YAxis />
+				<YAxis domain={['auto', 'auto']} />
 				<Tooltip />
 			</LineChart>
 		</ResponsiveContainer>

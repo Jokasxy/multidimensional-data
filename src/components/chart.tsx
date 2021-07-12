@@ -28,14 +28,14 @@ const Chart = (props: Props, ref: any) => {
 				const keyObject = keysToObject(dataObject);
 
 				setRepresentation(keyObject);
-				setChartType(values.type);
+				setChartType(values[fields.chartType.name]);
 				setXAxis('key');
 				setYAxis('value');
 			} else {
 				const movedData = moveToDataArray(data, values[fields.xAxis.name], values[fields.yAxis.name]);
 
 				setRepresentation(movedData.data);
-				setChartType(values.type);
+				setChartType(values[fields.chartType.name]);
 				setXAxis(movedData.xAxis);
 				setYAxis(movedData.yAxis);
 			}
