@@ -16,7 +16,7 @@ const BarChartComponent = (props: Props) => {
 				<Bar dataKey={yAxis} fill={colors.blue} />
 				<CartesianGrid stroke={colors.gridGray} />
 				<XAxis dataKey={xAxis} />
-				<YAxis />
+				<YAxis domain={['auto', 'auto']} />
 				<Tooltip />
 			</BarChart>
 		</ResponsiveContainer>
