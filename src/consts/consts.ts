@@ -50,4 +50,6 @@ export const errorMessages = {
 	queryApiField: 'URL je obavezan!',
 	queryParams: 'Parametri nisu u JSON formatu!',
 	chartType: 'Tip grafa je obavezan',
+	xAxis: 'Podaci x-osi su obavezni',
+	yAxis: 'Podaci y-osi su obavezni',
 }

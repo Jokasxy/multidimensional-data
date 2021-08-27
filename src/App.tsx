@@ -156,7 +156,10 @@ function App() {
 									value={value}
 									onChange={onChange}
 									label={fields.xAxis.placeholder}
-								>
+									error={Boolean(errors[fields.xAxis.name])}
+									helperText={
+										errors[fields.xAxis.name] ? errors[fields.xAxis.name].message : ''
+									}>
 									<MenuItem value="KEYS">KEYS</MenuItem>
 									{dataKeyMapper(queryData)?.map((item: any, key: number) => (
 										<MenuItem key={key} value={item}>
@@ -168,6 +171,7 @@ function App() {
 							control={control}
 							name={fields.xAxis.name}
 							defaultValue=""
+							rules={{ required: { value: true, message: errorMessages.xAxis } }}
 						/>
 						<Controller
 							render={({ field: { name, value, onChange } }) => (
@@ -178,7 +182,10 @@ function App() {
 									value={value}
 									onChange={onChange}
 									label={fields.yAxis.placeholder}
-								>
+									error={Boolean(errors[fields.yAxis.name])}
+									helperText={
+										errors[fields.yAxis.name] ? errors[fields.yAxis.name].message : ''
+									}>
 									<MenuItem value="KEYS">KEYS</MenuItem>
 									{dataKeyMapper(queryData)?.map((item: any, key: number) => (
 										<MenuItem key={key} value={item}>
@@ -190,6 +197,7 @@ function App() {
 							control={control}
 							name={fields.yAxis.name}
 							defaultValue=""
+							rules={{ required: { value: true, message: errorMessages.yAxis } }}
 						/>
 
 						<Button type="submit">Prikaži</Button>

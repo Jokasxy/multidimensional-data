@@ -1,0 +1,46 @@
+{
+    "kolovoz-3": [
+        {
+            "dan": "Ponedjeljak",
+            "broj-sati": 6
+        },
+        {
+            "dan": "Utorak",
+            "broj-sati": 7
+        },
+        {
+            "dan": "Srijeda",
+            "broj-sati": 8
+        },
+        {
+            "dan": "Četvrtak",
+            "broj-sati": 5
+        },
+        {
+            "dan": "Petak",
+            "broj-sati": 0
+        }
+    ],
+    "kolovoz-4": [
+        {
+            "dan": "Ponedjeljak",
+            "broj-sati": 8
+        },
+        {
+            "dan": "Utorak",
+            "broj-sati": 8
+        },
+        {
+            "dan": "Srijeda",
+            "broj-sati": 8
+        },
+        {
+            "dan": "Četvrtak",
+            "broj-sati": 7
+        },
+        {
+            "dan": "Petak",
+            "broj-sati": 4
+        }
+    ]
+}
