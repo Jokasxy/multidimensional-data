@@ -9,11 +9,7 @@ import { dataKeyMapper } from './helpers/dataKeyHelper';
 import { isJSON } from './helpers/isJSON';
 
 function App() {
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm();
+	const { control, handleSubmit } = useForm();
 
 	const [queryData, setQueryData] = React.useState<any>();
 
@@ -69,19 +65,15 @@ function App() {
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<Controller
-								render={({ field: { name, value, onChange } }) => (
+								render={({ field: { name, value, onChange }, fieldState: { error } }) => (
 									<TextField
 										fullWidth
 										name={name}
 										value={value}
 										onChange={onChange}
 										label={fields.queryApiField.placeholder}
-										error={Boolean(errors[fields.queryApiField.name])}
-										helperText={
-											errors[fields.queryApiField.name]
-												? errors[fields.queryApiField.name].message
-												: ''
-										}
+										error={Boolean(error)}
+										helperText={error?.message || ''}
 									/>
 								)}
 								control={control}
@@ -92,7 +84,7 @@ function App() {
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<Controller
-								render={({ field: { name, value, onChange } }) => (
+								render={({ field: { name, value, onChange }, fieldState: { error } }) => (
 									<TextField
 										multiline
 										fullWidth
@@ -100,12 +92,8 @@ function App() {
 										value={value}
 										onChange={onChange}
 										label={fields.queryParams.placeholder}
-										error={Boolean(errors[fields.queryParams.name])}
-										helperText={
-											errors[fields.queryParams.name]
-												? errors[fields.queryParams.name].message
-												: ''
-										}
+										error={Boolean(error)}
+										helperText={error?.message || ''}
 									/>
 								)}
 								control={control}
@@ -123,7 +111,7 @@ function App() {
 				{queryData && (
 					<Box component="form" onSubmit={handleSubmit(handleDataSelection)}>
 						<Controller
-							render={({ field: { name, value, onChange } }) => (
+							render={({ field: { name, value, onChange }, fieldState: { error } }) => (
 								<TextField
 									select
 									fullWidth
@@ -131,10 +119,8 @@ function App() {
 									value={value}
 									onChange={onChange}
 									label={fields.chartType.placeholder}
-									error={Boolean(errors[fields.chartType.name])}
-									helperText={
-										errors[fields.chartType.name] ? errors[fields.chartType.name].message : ''
-									}>
+									error={Boolean(error)}
+									helperText={error?.message || ''}>
 									{charts.map((item, key) => (
 										<MenuItem key={key} value={item.value}>
 											{item.name}
@@ -148,7 +134,7 @@ function App() {
 							rules={{ required: { value: true, message: errorMessages.chartType } }}
 						/>
 						<Controller
-							render={({ field: { name, value, onChange } }) => (
+							render={({ field: { name, value, onChange }, fieldState: { error } }) => (
 								<TextField
 									select
 									fullWidth
@@ -156,10 +142,8 @@ function App() {
 									value={value}
 									onChange={onChange}
 									label={fields.xAxis.placeholder}
-									error={Boolean(errors[fields.xAxis.name])}
-									helperText={
-										errors[fields.xAxis.name] ? errors[fields.xAxis.name].message : ''
-									}>
+									error={Boolean(error)}
+									helperText={error?.message || ''}>
 									<MenuItem value="KEYS">KEYS</MenuItem>
 									{dataKeyMapper(queryData)?.map((item: any, key: number) => (
 										<MenuItem key={key} value={item}>
@@ -174,7 +158,7 @@ function App() {
 							rules={{ required: { value: true, message: errorMessages.xAxis } }}
 						/>
 						<Controller
-							render={({ field: { name, value, onChange } }) => (
+							render={({ field: { name, value, onChange }, fieldState: { error } }) => (
 								<TextField
 									select
 									fullWidth
@@ -182,10 +166,8 @@ function App() {
 									value={value}
 									onChange={onChange}
 									label={fields.yAxis.placeholder}
-									error={Boolean(errors[fields.yAxis.name])}
-									helperText={
-										errors[fields.yAxis.name] ? errors[fields.yAxis.name].message : ''
-									}>
+									error={Boolean(error)}
+									helperText={error?.message || ''}>
 									<MenuItem value="KEYS">KEYS</MenuItem>
 									{dataKeyMapper(queryData)?.map((item: any, key: number) => (
 										<MenuItem key={key} value={item}>
