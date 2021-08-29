@@ -2,44 +2,42 @@ import React from 'react';
 import { Box, Button, TextField, MenuItem, Grid } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
 import './App.css';
-import { charts, errorMessages, fields, QueryTypes } from './consts/consts';
-import { queryApiData } from './helpers/queryHelper';
-import Chart, { ChartRef } from './components/chart';
-import { dataKeyMapper } from './helpers/dataKeyHelper';
-import { isJSON } from './helpers/isJSON';
+import { grafovi, porukePogreske, polja, TipoviPoziva } from './konstante/konstante';
+import { dohvatiPodatke } from './pomocnici/pomocniDohvacanjaPodataka';
+import Chart, { GrafRef } from './komponente/graf';
+import { mapirajPodatkovneKljuceve } from './pomocnici/pomocnikKljucevaPodataka';
+import { tipJSON } from './pomocnici/tipJSON';
 
 function App() {
 	const { control, handleSubmit } = useForm();
 
-	const [queryData, setQueryData] = React.useState<any>();
+	const [podaci, postaviPodatke] = React.useState<any>();
 
-	const chartRef = React.useRef<ChartRef>(null);
+	const grafRef = React.useRef<GrafRef>(null);
 
-	const handleQuerySubmit = React.useCallback((values) => {
-		queryApiData(
-			values[fields.queryApiField.name],
-			values[fields.queryType.name],
-			values[fields.queryParams.name]
-		).then((response) => {
-			setQueryData(response);
-		});
+	const posaljiZahtjev = React.useCallback((vrijednosti) => {
+		dohvatiPodatke(vrijednosti[polja.putanja.naziv], vrijednosti[polja.tipPoziva.naziv], vrijednosti[polja.parametri.naziv]).then(
+			(odgovor) => {
+				postaviPodatke(odgovor);
+			}
+		);
 	}, []);
 
-	const handleDataSelection = React.useCallback((values) => {
-		chartRef.current?.drawChart(values);
+	const odabirPodataka = React.useCallback((vrijednosti) => {
+		grafRef.current?.nacrtajGraf(vrijednosti);
 	}, []);
 
-	const validateQueryParams = React.useCallback((code: string) => {
-		if (code.length === 0 || isJSON(code)) {
+	const provjeriParametre = React.useCallback((kod: string) => {
+		if (kod.length === 0 || tipJSON(kod)) {
 			return true;
 		}
-		return errorMessages.queryParams;
+		return porukePogreske.parametri;
 	}, []);
 
 	return (
 		<Box className="App">
 			<Box component="main" maxWidth="1200px" margin="32px auto">
-				<Box component="form" onSubmit={handleSubmit(handleQuerySubmit)}>
+				<Box component="form" onSubmit={handleSubmit(posaljiZahtjev)}>
 					<Grid container spacing={4}>
 						<Grid item xs={12} md={4}>
 							<Controller
@@ -50,8 +48,8 @@ function App() {
 										name={name}
 										value={value}
 										onChange={onChange}
-										label={fields.queryType.placeholder}>
-										{Object.values(QueryTypes).map((item, key) => (
+										label={polja.tipPoziva.rezerviraniTekst}>
+										{Object.values(TipoviPoziva).map((item, key) => (
 											<MenuItem key={key} value={item}>
 												{item}
 											</MenuItem>
@@ -59,8 +57,8 @@ function App() {
 									</TextField>
 								)}
 								control={control}
-								name={fields.queryType.name}
-								defaultValue={QueryTypes.GET}
+								name={polja.tipPoziva.naziv}
+								defaultValue={TipoviPoziva.DOHVATI}
 							/>
 						</Grid>
 						<Grid item xs={12} md={8}>
@@ -71,15 +69,15 @@ function App() {
 										name={name}
 										value={value}
 										onChange={onChange}
-										label={fields.queryApiField.placeholder}
+										label={polja.putanja.rezerviraniTekst}
 										error={Boolean(error)}
 										helperText={error?.message || ''}
 									/>
 								)}
 								control={control}
-								name={fields.queryApiField.name}
+								name={polja.putanja.naziv}
 								defaultValue=""
-								rules={{ required: { value: true, message: errorMessages.queryApiField } }}
+								rules={{ required: { value: true, message: porukePogreske.putanja } }}
 							/>
 						</Grid>
 						<Grid item xs={12} md={8}>
@@ -91,15 +89,15 @@ function App() {
 										name={name}
 										value={value}
 										onChange={onChange}
-										label={fields.queryParams.placeholder}
+										label={polja.parametri.rezerviraniTekst}
 										error={Boolean(error)}
 										helperText={error?.message || ''}
 									/>
 								)}
 								control={control}
-								name={fields.queryParams.name}
+								name={polja.parametri.naziv}
 								defaultValue=""
-								rules={{ validate: validateQueryParams }}
+								rules={{ validate: provjeriParametre }}
 							/>
 						</Grid>
 						<Grid item xs={12} md={4}>
@@ -108,8 +106,8 @@ function App() {
 					</Grid>
 				</Box>
 
-				{queryData && (
-					<Box component="form" onSubmit={handleSubmit(handleDataSelection)}>
+				{podaci && (
+					<Box component="form" onSubmit={handleSubmit(odabirPodataka)}>
 						<Controller
 							render={({ field: { name, value, onChange }, fieldState: { error } }) => (
 								<TextField
@@ -118,20 +116,20 @@ function App() {
 									name={name}
 									value={value}
 									onChange={onChange}
-									label={fields.chartType.placeholder}
+									label={polja.tipGrafa.rezerviraniTekst}
 									error={Boolean(error)}
 									helperText={error?.message || ''}>
-									{charts.map((item, key) => (
-										<MenuItem key={key} value={item.value}>
-											{item.name}
+									{grafovi.map((artikal, kljuc) => (
+										<MenuItem key={kljuc} value={artikal.vrijednost}>
+											{artikal.naziv}
 										</MenuItem>
 									))}
 								</TextField>
 							)}
 							control={control}
-							name={fields.chartType.name}
+							name={polja.tipGrafa.naziv}
 							defaultValue=""
-							rules={{ required: { value: true, message: errorMessages.chartType } }}
+							rules={{ required: { value: true, message: porukePogreske.tipGrafa } }}
 						/>
 						<Controller
 							render={({ field: { name, value, onChange }, fieldState: { error } }) => (
@@ -141,11 +139,11 @@ function App() {
 									name={name}
 									value={value}
 									onChange={onChange}
-									label={fields.xAxis.placeholder}
+									label={polja.xOs.rezerviraniTekst}
 									error={Boolean(error)}
 									helperText={error?.message || ''}>
-									<MenuItem value="KEYS">KEYS</MenuItem>
-									{dataKeyMapper(queryData)?.map((item: any, key: number) => (
+									<MenuItem value="KLJUCEVI">KLJUCEVI</MenuItem>
+									{mapirajPodatkovneKljuceve(podaci)?.map((item: any, key: number) => (
 										<MenuItem key={key} value={item}>
 											{item}
 										</MenuItem>
@@ -153,9 +151,9 @@ function App() {
 								</TextField>
 							)}
 							control={control}
-							name={fields.xAxis.name}
+							name={polja.xOs.naziv}
 							defaultValue=""
-							rules={{ required: { value: true, message: errorMessages.xAxis } }}
+							rules={{ required: { value: true, message: porukePogreske.xOs } }}
 						/>
 						<Controller
 							render={({ field: { name, value, onChange }, fieldState: { error } }) => (
@@ -165,11 +163,11 @@ function App() {
 									name={name}
 									value={value}
 									onChange={onChange}
-									label={fields.yAxis.placeholder}
+									label={polja.yOs.rezerviraniTekst}
 									error={Boolean(error)}
 									helperText={error?.message || ''}>
-									<MenuItem value="KEYS">KEYS</MenuItem>
-									{dataKeyMapper(queryData)?.map((item: any, key: number) => (
+									<MenuItem value="KLJUCEVI">KLJUCEVI</MenuItem>
+									{mapirajPodatkovneKljuceve(podaci)?.map((item: any, key: number) => (
 										<MenuItem key={key} value={item}>
 											{item}
 										</MenuItem>
@@ -177,16 +175,16 @@ function App() {
 								</TextField>
 							)}
 							control={control}
-							name={fields.yAxis.name}
+							name={polja.yOs.naziv}
 							defaultValue=""
-							rules={{ required: { value: true, message: errorMessages.yAxis } }}
+							rules={{ required: { value: true, message: porukePogreske.yOs } }}
 						/>
 
 						<Button type="submit">Prikaži</Button>
 					</Box>
 				)}
 
-				<Chart data={queryData} ref={chartRef} />
+				<Chart podaci={podaci} ref={grafRef} />
 			</Box>
 		</Box>
 	);
